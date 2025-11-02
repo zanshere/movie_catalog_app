@@ -4,7 +4,6 @@ import 'package:movie_catalog_app/main.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
 
-
 void main() {
   testWidgets('Home screen loads correctly', (WidgetTester tester) async {
     // Build our app
@@ -37,6 +36,7 @@ void main() {
       description: 'Test description',
       releaseYear: 2024,
       duration: '2h 0min',
+      cast: ['Actor 1', 'Actor 2', 'Actor 3'], // Tambahkan properti cast
     );
 
     await tester.pumpWidget(MaterialApp(

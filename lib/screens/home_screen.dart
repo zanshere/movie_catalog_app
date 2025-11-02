@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
+import 'package:movie_catalog_app/screens/search_screen.dart';
+import 'package:movie_catalog_app/screens/favorites_screen.dart';
+import 'package:movie_catalog_app/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isDarkMode;
+  final VoidCallback onThemeToggle;
+
+  const HomeScreen({
+    super.key,
+    required this.isDarkMode,
+    required this.onThemeToggle,
+  });
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -20,7 +30,6 @@ class HomeScreenState extends State<HomeScreen> {
     setState(() {
       if (_favoriteMovies.contains(movieId)) {
         _favoriteMovies.remove(movieId);
-        // Tampilkan snackbar untuk feedback
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Removed from favorites'),
@@ -33,7 +42,6 @@ class HomeScreenState extends State<HomeScreen> {
         );
       } else {
         _favoriteMovies.add(movieId);
-        // Tampilkan snackbar untuk feedback
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Added to favorites'),
@@ -78,7 +86,6 @@ class HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  // Widget untuk gambar dengan loading dan error handling yang lebih baik
   Widget _buildNetworkImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
     return Image.network(
       imageUrl,
@@ -125,7 +132,6 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Handle navigation bottom bar
   void _onItemTapped(int index) {
     if (index == _currentIndex) return;
     
@@ -133,48 +139,99 @@ class HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
     });
 
-    // Untuk sementara, kita akan tetap di HomeScreen
-    // dan tampilkan placeholder untuk tab lainnya
+    // Navigate to different screens based on index
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SearchScreen()),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0; // Return to home after search
+        });
+      });
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FavoritesScreen(
+            favoriteMovies: _favoriteMovies,
+            onFavoriteToggle: _toggleFavorite,
+          ),
+        ),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0; // Return to home after favorites
+        });
+      });
+    } else if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      ).then((_) {
+        setState(() {
+          _currentIndex = 0; // Return to home after profile
+        });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
           'MovieStream',
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: theme.appBarTheme.foregroundColor ?? Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.white, size: 28),
+            icon: Icon(
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+              size: 24,
+            ),
+            onPressed: widget.onThemeToggle,
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+              size: 28,
+            ),
             onPressed: () {
-              // Navigate to simple search screen
-              _showSearchDialog();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
+              );
             },
           ),
         ],
       ),
       body: _buildBody(theme),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(theme),
     );
   }
 
   Widget _buildBody(ThemeData theme) {
-    // Jika bukan di tab Home, tampilkan screen placeholder
-    if (_currentIndex != 0) {
-      return _buildPlaceholderScreen();
+    // Show different content based on current index
+    switch (_currentIndex) {
+      case 0:
+        return _buildHomeContent(theme);
+      default:
+        return _buildHomeContent(theme); // Fallback to home content
     }
+  }
 
-    // Tampilkan konten home screen
+  Widget _buildHomeContent(ThemeData theme) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -210,7 +267,7 @@ class HomeScreenState extends State<HomeScreen> {
         Text(
           'Featured Movies',
           style: theme.textTheme.titleMedium?.copyWith(
-            color: Colors.white,
+            color: theme.textTheme.bodyLarge?.color ?? Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -269,7 +326,6 @@ class HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        // Favorite Button di Carousel
                         Positioned(
                           top: 8,
                           right: 8,
@@ -389,14 +445,13 @@ class HomeScreenState extends State<HomeScreen> {
             Text(
               title,
               style: theme.textTheme.titleMedium?.copyWith(
-                color: Colors.white,
+                color: theme.textTheme.bodyLarge?.color ?? Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
             GestureDetector(
               onTap: () {
-                // Navigate to see all screen
-                _showSeeAllDialog(title, movies);
+                _showSeeAllDialog(title, movies, theme);
               },
               child: Text(
                 'See all',
@@ -431,84 +486,15 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPlaceholderScreen() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            _getPlaceholderIcon(),
-            size: 64,
-            color: Colors.blue,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _getPlaceholderText(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            _getPlaceholderSubtext(),
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _currentIndex = 0; // Kembali ke home
-              });
-            },
-            child: const Text('Back to Home'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _getPlaceholderIcon() {
-    switch (_currentIndex) {
-      case 1: return Icons.search;
-      case 2: return Icons.favorite;
-      case 3: return Icons.person;
-      default: return Icons.home;
-    }
-  }
-
-  String _getPlaceholderText() {
-    switch (_currentIndex) {
-      case 1: return 'Search';
-      case 2: return 'Favorites';
-      case 3: return 'Profile';
-      default: return 'Home';
-    }
-  }
-
-  String _getPlaceholderSubtext() {
-    switch (_currentIndex) {
-      case 1: return 'Search functionality coming soon';
-      case 2: return '${_favoriteMovies.length} movies in favorites';
-      case 3: return 'Profile screen coming soon';
-      default: return 'Browse featured movies';
-    }
-  }
-
-  void _showSeeAllDialog(String title, List<Movie> movies) {
+  void _showSeeAllDialog(String title, List<Movie> movies, ThemeData theme) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: theme.dialogBackgroundColor ?? const Color(0xFF1A1A2E),
         title: Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme.textTheme.bodyLarge?.color ?? Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -532,18 +518,18 @@ class HomeScreenState extends State<HomeScreen> {
                         width: 50,
                         height: 70,
                         color: Colors.grey[800],
-                        child: const Icon(Icons.movie, color: Colors.white54),
+                        child: Icon(Icons.movie, color: Colors.white54),
                       );
                     },
                   ),
                 ),
                 title: Text(
                   movie.title,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.textTheme.bodyLarge?.color ?? Colors.white),
                 ),
                 subtitle: Text(
                   '⭐ ${movie.rating} • ${movie.releaseYear}',
-                  style: const TextStyle(color: Colors.white70),
+                  style: TextStyle(color: theme.textTheme.bodyMedium?.color ?? Colors.white70),
                 ),
                 trailing: IconButton(
                   icon: Icon(
@@ -552,7 +538,7 @@ class HomeScreenState extends State<HomeScreen> {
                         : Icons.favorite_border,
                     color: _favoriteMovies.contains(movie.id)
                         ? Colors.red
-                        : Colors.white,
+                        : theme.textTheme.bodyLarge?.color ?? Colors.white,
                   ),
                   onPressed: () {
                     _toggleFavorite(movie.id);
@@ -583,81 +569,14 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showSearchDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A2E),
-        title: const Text(
-          'Search Movies',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 400,
-          child: Column(
-            children: [
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const TextField(
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search movies...',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search, color: Colors.white54),
-                    contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text(
-                        'Search functionality\ncoming soon',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Close',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  BottomNavigationBar _buildBottomNavigationBar() {
+  BottomNavigationBar _buildBottomNavigationBar(ThemeData theme) {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: _onItemTapped,
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+      unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
