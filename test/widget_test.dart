@@ -1,30 +1,62 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:movie_catalog_app/main.dart';
+import 'package:movie_catalog_app/models/movie.dart';
+import 'package:movie_catalog_app/widgets/movie_card.dart';
+
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Home screen loads correctly', (WidgetTester tester) async {
+    // Build our app
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify app title is displayed
+    expect(find.text('MovieStream'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify search icon is present
+    expect(find.byIcon(Icons.search), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify featured movies section
+    expect(find.text('Featured Movies'), findsOneWidget);
+
+    // Verify new movies section
+    expect(find.text('New Movies'), findsOneWidget);
+
+    // Verify popular movies section
+    expect(find.text('Popular Movies'), findsOneWidget);
+  });
+
+  testWidgets('Movie card displays movie information', (WidgetTester tester) async {
+    final testMovie = Movie(
+      id: '1',
+      title: 'Test Movie',
+      posterUrl: 'https://example.com/poster.jpg',
+      backdropUrl: 'https://example.com/backdrop.jpg',
+      rating: 8.5,
+      genres: ['Action', 'Adventure'],
+      description: 'Test description',
+      releaseYear: 2024,
+      duration: '2h 0min',
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: MovieCard(
+          movie: testMovie,
+          isFavorite: false,
+          onFavoriteToggle: (isFavorite) {},
+        ),
+      ),
+    ));
+
+    // Verify movie title is displayed
+    expect(find.text('Test Movie'), findsOneWidget);
+
+    // Verify rating is displayed
+    expect(find.text('8.5'), findsOneWidget);
+
+    // Verify genres are displayed
+    expect(find.text('Action'), findsOneWidget);
+    expect(find.text('Adventure'), findsOneWidget);
   });
 }
