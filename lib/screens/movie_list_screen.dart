@@ -76,12 +76,12 @@ class _MovieListScreenState extends State<MovieListScreen> {
           final padding = isDesktop ? 32.0 : 16.0;
 
           return Padding(
-            padding: EdgeInsets.all(padding),
+            padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding / 2),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: crossAxisCount,
                 crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+                mainAxisSpacing: 20,
                 childAspectRatio: childAspectRatio,
               ),
               itemCount: widget.movies.length,

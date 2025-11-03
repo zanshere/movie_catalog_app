@@ -178,25 +178,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 8),
-         SizedBox(
-  height: 350,
-  child: ListView.separated(
-    scrollDirection: Axis.horizontal,
-    physics: const BouncingScrollPhysics(),
-    itemCount: movies.length,
-    separatorBuilder: (_, __) => const SizedBox(width: 12),
-    itemBuilder: (context, index) {
-      final movie = movies[index];
-      return MovieCard(
-        movie: movie,
-        isFavorite: false,
-        onFavoriteToggle: (_) {},
-      );
-    },
-  ),
-),
-const SizedBox(height: 20), // 👉 tambahkan ini di bawah section
-
+          SizedBox(
+            height: 340,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+               physics: const BouncingScrollPhysics(),
+              itemCount: movies.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final movie = movies[index];
+                return MovieCard(
+                  movie: movie,
+                  isFavorite: _favoriteMovies.contains(movie.id),
+                  onFavoriteToggle: (_) => _toggleFavorite(movie.id),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

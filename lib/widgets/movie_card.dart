@@ -13,12 +13,7 @@ class MovieCard extends StatelessWidget {
     required this.onFavoriteToggle,
   });
 
-  Widget _buildImage(String imageUrl,
-      {double? height, double? width, BoxFit? fit}) {
-    if (imageUrl.isEmpty) {
-      return _buildErrorPlaceholder(height: height, width: width);
-    }
-
+  Widget _buildImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
     if (imageUrl.startsWith('http')) {
       return Image.network(
         imageUrl,
@@ -30,12 +25,9 @@ class MovieCard extends StatelessWidget {
           return Container(
             height: height,
             width: width,
-            color: Colors.grey[850],
+            color: Colors.grey[800],
             child: const Center(
-              child: CircularProgressIndicator(
-                color: Colors.blueAccent,
-                strokeWidth: 2,
-              ),
+              child: CircularProgressIndicator(color: Colors.blue, strokeWidth: 2),
             ),
           );
         },
@@ -60,16 +52,13 @@ class MovieCard extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      color: Colors.grey[850],
+      color: Colors.grey[800],
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.movie_outlined, color: Colors.white54, size: 32),
+          Icon(Icons.movie, color: Colors.white54, size: 32),
           SizedBox(height: 4),
-          Text(
-            'No Image',
-            style: TextStyle(color: Colors.white54, fontSize: 10),
-          ),
+          Text('No Image', style: TextStyle(color: Colors.white54, fontSize: 10)),
         ],
       ),
     );
@@ -93,7 +82,6 @@ class MovieCard extends StatelessWidget {
                 : isTablet
                     ? 200.0
                     : 190.0;
-
         final cardWidth = isLargeDesktop
             ? 220.0
             : isDesktop
@@ -101,7 +89,6 @@ class MovieCard extends StatelessWidget {
                 : isTablet
                     ? 180.0
                     : 160.0;
-
         final titleFontSize = isLargeDesktop
             ? 16.0
             : isDesktop
@@ -109,7 +96,6 @@ class MovieCard extends StatelessWidget {
                 : isTablet
                     ? 14.0
                     : 13.0;
-
         final genreFontSize = isLargeDesktop
             ? 11.0
             : isDesktop
@@ -117,7 +103,6 @@ class MovieCard extends StatelessWidget {
                 : isTablet
                     ? 9.0
                     : 8.0;
-
         final iconSize = isLargeDesktop
             ? 22.0
             : isDesktop
@@ -147,15 +132,12 @@ class MovieCard extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Hero(
-                            tag: 'movie_${movie.id}',
-                            child: _buildImage(
-                              movie.posterUrl.isNotEmpty
-                                  ? movie.posterUrl
-                                  : movie.backdropUrl,
-                              height: imageHeight,
-                              width: cardWidth,
-                            ),
+                          child: _buildImage(
+                            movie.posterUrl.isNotEmpty
+                                ? movie.posterUrl
+                                : movie.backdropUrl,
+                            height: imageHeight,
+                            width: cardWidth,
                           ),
                         ),
                         // ❤️ Favorite icon
@@ -169,50 +151,45 @@ class MovieCard extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
+                                color: Colors.black.withAlpha(128),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color:
-                                    isFavorite ? Colors.redAccent : Colors.white,
+                                isFavorite ? Icons.favorite : Icons.favorite_border,
+                                color: isFavorite ? Colors.red : Colors.white,
                                 size: iconSize,
                               ),
                             ),
                           ),
                         ),
                         // ⭐ Rating badge
-                        if (movie.rating > 0)
-                          Positioned(
-                            bottom: 8,
-                            left: 8,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.star,
-                                      color: Colors.amber, size: 12),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    movie.rating.toStringAsFixed(1),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                        Positioned(
+                          bottom: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(178),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.star, color: Colors.amber, size: 12),
+                                const SizedBox(width: 2),
+                                Text(
+                                  movie.rating.toStringAsFixed(1),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
+                        ),
                       ],
                     ),
                   ),
@@ -222,10 +199,9 @@ class MovieCard extends StatelessWidget {
                   SizedBox(
                     height: 40,
                     child: Text(
-                      movie.title.isNotEmpty ? movie.title : 'Unknown Title',
+                      movie.title,
                       style: TextStyle(
-                        color: theme.textTheme.bodyLarge?.color ??
-                            Colors.white.withOpacity(0.9),
+                        color: theme.textTheme.bodyLarge?.color ?? Colors.white,
                         fontSize: titleFontSize,
                         fontWeight: FontWeight.bold,
                       ),
@@ -241,46 +217,28 @@ class MovieCard extends StatelessWidget {
                     child: Wrap(
                       spacing: 4,
                       runSpacing: 4,
-                      children: movie.genres.isNotEmpty
-                          ? movie.genres.take(2).map((genre) {
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  genre.length > 8
-                                      ? '${genre.substring(0, 8)}...'
-                                      : genre,
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: genreFontSize,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              );
-                            }).toList()
-                          : [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  'Unknown',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: genreFontSize,
-                                  ),
-                                ),
-                              )
-                            ],
+                      children: movie.genres.take(2).map((genre) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            genre.length > 8
+                                ? '${genre.substring(0, 8)}...'
+                                : genre,
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: genreFontSize,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ],
