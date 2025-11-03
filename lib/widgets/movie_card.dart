@@ -13,55 +13,85 @@ class MovieCard extends StatelessWidget {
     required this.onFavoriteToggle,
   });
 
-  Widget _buildNetworkImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
-    return Image.network(
-      imageUrl,
+  Widget _buildImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
+    if (imageUrl.startsWith('http')) {
+      return Image.network(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            height: height,
+            width: width,
+            color: Colors.grey[800],
+            child: Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+                color: Colors.blue,
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildErrorPlaceholder(height: height, width: width);
+        },
+      );
+    } else {
+      return Image.asset(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildErrorPlaceholder(height: height, width: width);
+        },
+      );
+    }
+  }
+
+  Widget _buildErrorPlaceholder({double? height, double? width}) {
+    return Container(
       height: height,
       width: width,
-      fit: fit ?? BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Container(
-          height: height,
-          width: width,
-          color: Colors.grey[800],
-          child: Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                  : null,
-              color: Colors.blue,
-              strokeWidth: 2,
+      color: Colors.grey[800],
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.movie,
+            color: Colors.white54,
+            size: 32,
+          ),
+          SizedBox(height: 4),
+          Text(
+            'No Image',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 10,
             ),
           ),
-        );
-      },
+        ],
+      ),
+    );
+  }
+
+  Widget yailah(BuildContext context) {
+    // Temp: Test asset loading
+    Image.asset(
+      'assets/images/1_kakak_7_ponakan.jpeg',
+      height: 100,
+      width: 100,
       errorBuilder: (context, error, stackTrace) {
-        return Container(
-          height: height,
-          width: width,
-          color: Colors.grey[800],
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.movie,
-                color: Colors.white54,
-                size: 32,
-              ),
-              SizedBox(height: 4),
-              Text(
-                'No Image',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
-        );
+        print('TEST - Asset error: $error');
+        return Text('Failed to load asset');
       },
     );
+    return Container();
   }
 
   @override
@@ -116,8 +146,8 @@ class MovieCard extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: _buildNetworkImage(
-                            movie.posterUrl,
+                          child: _buildImage(
+                            movie.posterUrl.isNotEmpty ? movie.posterUrl : movie.backdropUrl,
                             height: imageHeight,
                             width: cardWidth,
                           ),
