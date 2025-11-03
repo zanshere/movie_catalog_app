@@ -5,6 +5,7 @@ import 'package:movie_catalog_app/widgets/movie_card.dart';
 import 'package:movie_catalog_app/screens/search_screen.dart'; // ✅ IMPORT BARU
 import 'package:movie_catalog_app/screens/favorites_screen.dart'; // ✅ IMPORT BARU
 import 'package:movie_catalog_app/screens/profile_screen.dart'; // ✅ IMPORT BARU
+import 'package:movie_catalog_app/widgets/movie_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,8 +17,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final Set<String> _favoriteMovies = {};
-  int _currentCarouselIndex = 0;
-  final PageController _pageController = PageController(viewportFraction: 0.85);
 
   void _toggleFavorite(String movieId) {
     setState(() {
@@ -27,6 +26,30 @@ class HomeScreenState extends State<HomeScreen> {
       } else {
         _favoriteMovies.add(movieId);
         _showSnackBar('Added to favorites', Icons.favorite);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Removed from favorites'),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        _favoriteMovies.add(movieId);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Added to favorites'),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     });
   }
@@ -129,6 +152,9 @@ class HomeScreenState extends State<HomeScreen> {
         return;
     }
     
+  void _onItemTapped(int index) {
+    if (index == _currentIndex) return;
+    
     setState(() {
       _currentIndex = index;
     });
@@ -198,18 +224,34 @@ class HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.search, color: Colors.white, size: 22),
             ),
             onPressed: _openSearchScreen,
+            icon: const Icon(Icons.search, color: Colors.white, size: 28),
+            onPressed: () {
+              Navigator.pushNamed(context, '/search');
+            },
           ),
         ],
       ),
-      body: _buildBody(theme),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth > 800;
+          final horizontalPadding = isWide ? (constraints.maxWidth * 0.1) : 16.0;
+          
+          return _buildBody(theme, horizontalPadding);
+        },
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
   Widget _buildBody(ThemeData theme) {
+  Widget _buildBody(ThemeData theme, double horizontalPadding) {
+    if (_currentIndex != 0) {
+      return _buildPlaceholderScreen();
+    }
+
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -219,6 +261,9 @@ class HomeScreenState extends State<HomeScreen> {
             _buildMovieSection('🎬 New Movies', newMovies, theme),
             const SizedBox(height: 30),
             _buildMovieSection('🔥 Popular Movies', popularMovies, theme),
+            _buildMovieSection('New Movies', newMovies, theme),
+            const SizedBox(height: 30),
+            _buildMovieSection('Popular Movies', popularMovies, theme),
             const SizedBox(height: 20),
           ],
         ),
@@ -233,7 +278,11 @@ class HomeScreenState extends State<HomeScreen> {
         Text(
           '🌟 Featured Movies',
           style: theme.textTheme.titleMedium?.copyWith(
+        const Text(
+          'Featured Movies',
+          style: TextStyle(
             color: Colors.white,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -354,6 +403,10 @@ class HomeScreenState extends State<HomeScreen> {
             color: _favoriteMovies.contains(movieId) ? Colors.red : Colors.white30,
             width: 1.5,
           ),
+        MovieCarousel(
+          movies: featuredMovies,
+          onFavoriteToggle: _toggleFavorite,
+          favoriteMovies: _favoriteMovies,
         ),
         child: Icon(
           _favoriteMovies.contains(movieId) ? Icons.favorite : Icons.favorite_border,
@@ -463,8 +516,9 @@ class HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               title,
-              style: theme.textTheme.titleMedium?.copyWith(
+              style: const TextStyle(
                 color: Colors.white,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -486,6 +540,21 @@ class HomeScreenState extends State<HomeScreen> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                Navigator.pushNamed(
+                  context,
+                  '/movie_list',
+                  arguments: {
+                    'title': title,
+                    'movies': movies,
+                  },
+                );
+              },
+              child: const Text(
+                'See all',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -493,7 +562,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 15),
         SizedBox(
-          height: 320,
+          height: 320, // Fixed height untuk konsistensi dengan MovieCard
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: movies.length,
@@ -605,6 +674,80 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildPlaceholderScreen() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            _getPlaceholderIcon(),
+            size: 64,
+            color: Colors.blue,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _getPlaceholderText(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _getPlaceholderSubtext(),
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _currentIndex = 0;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            child: const Text('Back to Home'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _getPlaceholderIcon() {
+    switch (_currentIndex) {
+      case 1: return Icons.search;
+      case 2: return Icons.favorite;
+      case 3: return Icons.person;
+      default: return Icons.home;
+    }
+  }
+
+  String _getPlaceholderText() {
+    switch (_currentIndex) {
+      case 1: return 'Search';
+      case 2: return 'Favorites';
+      case 3: return 'Profile';
+      default: return 'Home';
+    }
+  }
+
+  String _getPlaceholderSubtext() {
+    switch (_currentIndex) {
+      case 1: return 'Search for your favorite movies';
+      case 2: return '${_favoriteMovies.length} movies in favorites';
+      case 3: return 'Manage your profile and settings';
+      default: return 'Browse featured movies';
+    }
+  }
+
   BottomNavigationBar _buildBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
@@ -634,6 +777,22 @@ class HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
+      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite),
+          label: 'Favorites',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
           label: 'Profile',
         ),
       ],
