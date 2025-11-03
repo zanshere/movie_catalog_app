@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
-// import 'package:movie_catalog_app/screens/detail_screen.dart';
-import 'package:movie_catalog_app/screens/search_screen.dart';
-import 'package:movie_catalog_app/screens/favorites_screen.dart';
-import 'package:movie_catalog_app/screens/profile_screen.dart';
+import 'package:movie_catalog_app/screens/search_screen.dart'; // Tambahkan ini
+import 'package:movie_catalog_app/screens/favorites_screen.dart'; // Tambahkan ini
+import 'package:movie_catalog_app/screens/profile_screen.dart'; // Tambahkan ini
 import 'package:movie_catalog_app/widgets/movie_card.dart';
 import 'package:movie_catalog_app/widgets/movie_carousel.dart';
 
@@ -26,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final Set<String> _favoriteMovies = {};
 
-  // ---- FUNGSI FAVORIT ----
   void _toggleFavorite(String movieId) {
     setState(() {
       if (_favoriteMovies.contains(movieId)) {
@@ -56,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ---- NAVIGASI BAWAH ----
   void _onItemTapped(int index) {
     if (_currentIndex == index) return;
     setState(() => _currentIndex = index);
@@ -124,23 +121,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 12),
           
-          // Tambahkan MovieCarousel di sini
+          // Movie Carousel
           MovieCarousel(
-            movies: dummyMovies.take(5).toList(),
+            movies: dummyMovies.take(8).toList(),
             onFavoriteToggle: _toggleFavorite,
             favoriteMovies: _favoriteMovies,
           ),
           const SizedBox(height: 20),
           
-          _buildMovieSection("Popular Movies", dummyMovies.take(6).toList()),
-          _buildMovieSection("New Releases", dummyMovies.reversed.take(6).toList()),
+          // Sections dengan lebih banyak film
+          _buildMovieSection("Popular Movies", dummyMovies.take(10).toList()),
+          _buildMovieSection("New Releases", dummyMovies.reversed.take(10).toList()),
+          _buildMovieSection("Action Movies", _getMoviesByGenre('Action')),
+          _buildMovieSection("Comedy Movies", _getMoviesByGenre('Comedy')),
         ],
       ),
     );
   }
 
+  // Helper function untuk filter by genre
+  List<Movie> _getMoviesByGenre(String genre) {
+    return dummyMovies.where((movie) => movie.genres.contains(genre)).toList();
+  }
+
   // ---- GRID / LIST MOVIE ----
   Widget _buildMovieSection(String title, List<Movie> movies) {
+    if (movies.isEmpty) return const SizedBox();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -169,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
                 child: Text(
-                  'See All',
+                  'See All (${movies.length})',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -182,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 340,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-               physics: const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: movies.length,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
@@ -195,6 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -218,7 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ---- BUILD UTAMA ----
   @override
   Widget build(BuildContext context) {
     return Scaffold(

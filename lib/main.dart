@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_catalog_app/screens/home_screen.dart';
 import 'package:movie_catalog_app/screens/detail_screen.dart';
-import 'package:movie_catalog_app/screens/search_screen.dart';
-import 'package:movie_catalog_app/screens/favorites_screen.dart';
-import 'package:movie_catalog_app/screens/profile_screen.dart';
 import 'package:movie_catalog_app/screens/movie_list_screen.dart';
-import 'package:movie_catalog_app/models/movie.dart';
+import 'package:movie_catalog_app/screens/video_player_screen.dart';
+import 'package:movie_catalog_app/models/movie.dart'; // Import Movie model
 
 void main() {
   runApp(const MyApp());
@@ -19,92 +17,54 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isDarkMode = true;
+  ThemeMode _themeMode = ThemeMode.light;
 
   void _toggleTheme() {
     setState(() {
-      _isDarkMode = !_isDarkMode;
+      _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Movie Streaming App',
-      debugShowCheckedModeBanner: false,
-      theme: _isDarkMode ? _darkTheme : _lightTheme,
-      home: HomeScreen(
-        isDarkMode: _isDarkMode,
-        onThemeToggle: _toggleTheme,
-      ),
+      title: 'Movie Catalog App',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _themeMode,
+      initialRoute: '/',
       routes: {
-        '/detail': (context) {
-          final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
-          return DetailScreen(movie: movie);
-        },
-        '/search': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-          return SearchScreen(
-            favoriteMovies: args?['favoriteMovies'] ?? <String>{},
-            onFavoriteToggle: args?['onFavoriteToggle'] ?? (String id) {},
-            isDarkMode: _isDarkMode,
-            onThemeToggle: _toggleTheme,
-          );
-        },
-        '/favorites': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-          return FavoritesScreen(
-            favoriteMovies: args?['favoriteMovies'] ?? <String>{},
-            onFavoriteToggle: args?['onFavoriteToggle'] ?? (String id) {},
-            isDarkMode: _isDarkMode,
-            onThemeToggle: _toggleTheme,
-          );
-        },
-        '/profile': (context) => ProfileScreen(
-          isDarkMode: _isDarkMode,
+        '/': (context) => HomeScreen(
+          isDarkMode: _themeMode == ThemeMode.dark,
           onThemeToggle: _toggleTheme,
         ),
+        '/detail': (context) {
+          final movie = ModalRoute.of(context)!.settings.arguments as Movie;
+          return DetailScreen(movie: movie);
+        },
         '/movie_list': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return MovieListScreen(
             title: args['title'],
             movies: args['movies'],
-            isDarkMode: _isDarkMode,
+            isDarkMode: _themeMode == ThemeMode.dark,
             onThemeToggle: _toggleTheme,
           );
         },
       },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/video') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => VideoPlayerScreen(
+              videoUrl: args['videoUrl'],
+              movieTitle: args['movieTitle'],
+            ),
+          );
+        }
+        return null;
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
-
-  final ThemeData _darkTheme = ThemeData(
-    primarySwatch: Colors.blue,
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF0F0F1E),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF0F0F1E),
-      elevation: 0,
-    ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFF1A1A2E),
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-    ),
-  );
-
-  final ThemeData _lightTheme = ThemeData(
-    primarySwatch: Colors.blue,
-    brightness: Brightness.light,
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      foregroundColor: Colors.black,
-    ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-    ),
-  );
 }

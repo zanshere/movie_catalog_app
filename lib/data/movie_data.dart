@@ -98,7 +98,7 @@ List<Movie> dummyMovies = [
     cast: ['Keanu Reeves', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '7',
+    id: '9',
     title: '1 Kakak 7 Ponakan',
     posterUrl: 'assets/images/poster/1_kakak_7_ponakan.jpeg',
     backdropUrl: 'assets/images/poster/1_kakak_7_ponakan.jpeg',
@@ -110,7 +110,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '8',
+    id: '10',
     title: 'Agak Laen',
     posterUrl: 'assets/images/poster/agak_laen.jpeg',
     backdropUrl: 'assets/images/poster/agak_laen.jpeg',
@@ -122,7 +122,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '9',
+    id: '11',
     title: 'Cek Toko Sebelah',
     posterUrl: 'assets/images/poster/cek_toko_sebelah.jpeg',
     backdropUrl: 'assets/images/poster/cek_toko_sebelah.jpeg',
@@ -134,7 +134,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '10',
+    id: '12',
     title: 'Cek Toko Sebelah 2',
     posterUrl: 'assets/images/poster/cek_toko_sebelah_2.jpeg',
     backdropUrl: 'assets/images/poster/cek_toko_sebelah_2.jpeg',
@@ -146,7 +146,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '11',
+    id: '13',
     title: 'Deadpool & Wolverine',
     posterUrl: 'assets/images/poster/deadpool_and_wolverine.jpeg',
     backdropUrl: 'assets/images/poster/deadpool_and_wolverine.jpeg',
@@ -158,7 +158,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '12',
+    id: '14',
     title: 'Freses',
     posterUrl: 'assets/images/poster/freses.jpeg',
     backdropUrl: 'assets/images/poster/freses.jpeg',
@@ -170,7 +170,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '13',
+    id: '15',
     title: 'Guru Guru Gokil',
     posterUrl: 'assets/images/poster/guru_guru_gokil.jpeg',
     backdropUrl: 'assets/images/poster/guru_guru_gokil.jpeg',
@@ -182,7 +182,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '14',
+    id: '16',
     title: 'Jatuh Cinta Seperti Di Film-Film',
     posterUrl: 'assets/images/poster/jatuh_cinta_seperti_di_film_film.jpeg',
     backdropUrl: 'assets/images/poster/jatuh_cinta_seperti_di_film_film.jpeg',
@@ -194,7 +194,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '15',
+    id: '17',
     title: 'Minecraft: The Movie',
     posterUrl: 'assets/images/poster/minecraft.jpeg',
     backdropUrl: 'assets/images/poster/minecraft.jpeg',
@@ -206,7 +206,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '16',
+    id: '18',
     title: 'Pasutri Gaje',
     posterUrl: 'assets/images/poster/pasutri_gaje.jpeg',
     backdropUrl: 'assets/images/poster/pasutri_gaje.jpeg',
@@ -218,7 +218,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '17',
+    id: '19',
     title: 'Perayaan Mati Rasa',
     posterUrl: 'assets/images/poster/perayaan_mati_rasa.jpeg',
     backdropUrl: 'assets/images/poster/perayaan_mati_rasa.jpeg',
@@ -230,7 +230,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '18',
+    id: '20',
     title: 'Sekawan Limo',
     posterUrl: 'assets/images/poster/sekawan_limo.jpeg',
     backdropUrl: 'assets/images/poster/sekawan_limo.jpeg',
@@ -242,7 +242,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '19',
+    id: '21',
     title: 'Smile',
     posterUrl: 'assets/images/poster/smile.jpeg',
     backdropUrl: 'assets/images/poster/smile.jpeg',
@@ -254,7 +254,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '20',
+    id: '22',
     title: 'Sore',
     posterUrl: 'assets/images/poster/sore.jpeg',
     backdropUrl: 'assets/images/poster/sore.jpeg',
@@ -266,7 +266,7 @@ List<Movie> dummyMovies = [
     cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
-    id: '21',
+    id: '23',
     title: 'Waktu Maghrib',
     posterUrl: 'assets/images/poster/waktu_maghrib.jpeg',
     backdropUrl: 'assets/images/poster/waktu_maghrib.jpeg',
