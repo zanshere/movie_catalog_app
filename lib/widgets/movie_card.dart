@@ -66,6 +66,7 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 600;
     
@@ -167,7 +168,7 @@ class MovieCard extends StatelessWidget {
                 child: Text(
                   movie.title,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: theme.textTheme.bodyLarge?.color ?? Colors.white,
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
                   ),

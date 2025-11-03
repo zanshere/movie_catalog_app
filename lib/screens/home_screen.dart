@@ -4,7 +4,6 @@ import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
 import 'package:movie_catalog_app/screens/search_screen.dart';
 import 'package:movie_catalog_app/screens/favorites_screen.dart';
-import 'package:movie_catalog_app/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -133,23 +132,19 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
-    if (index == _currentIndex) return;
-    
     setState(() {
       _currentIndex = index;
     });
 
-    // Navigate to different screens based on index
+    // Handle navigation for different tabs
     if (index == 1) {
+      // Search Screen
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SearchScreen()),
-      ).then((_) {
-        setState(() {
-          _currentIndex = 0; // Return to home after search
-        });
-      });
+        MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
     } else if (index == 2) {
+      // Favorites Screen
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -158,27 +153,13 @@ class HomeScreenState extends State<HomeScreen> {
             onFavoriteToggle: _toggleFavorite,
           ),
         ),
-      ).then((_) {
-        setState(() {
-          _currentIndex = 0; // Return to home after favorites
-        });
-      });
-    } else if (index == 3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ProfileScreen()),
-      ).then((_) {
-        setState(() {
-          _currentIndex = 0; // Return to home after profile
-        });
-      });
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
     
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -193,6 +174,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
+          // Theme Toggle Button
           IconButton(
             icon: Icon(
               widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
@@ -201,6 +183,7 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: widget.onThemeToggle,
           ),
+          // Search Button
           IconButton(
             icon: Icon(
               Icons.search,
@@ -210,7 +193,7 @@ class HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SearchScreen()),
+                MaterialPageRoute(builder: (context) => SearchScreen()),
               );
             },
           ),
@@ -222,16 +205,12 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody(ThemeData theme) {
-    // Show different content based on current index
-    switch (_currentIndex) {
-      case 0:
-        return _buildHomeContent(theme);
-      default:
-        return _buildHomeContent(theme); // Fallback to home content
+    // If not on home tab, show placeholder
+    if (_currentIndex != 0) {
+      return _buildPlaceholderScreen(theme);
     }
-  }
 
-  Widget _buildHomeContent(ThemeData theme) {
+    // Home screen content
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -483,6 +462,70 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPlaceholderScreen(ThemeData theme) {
+    String title = 'Home';
+    String subtitle = 'Browse featured movies';
+    IconData icon = Icons.home;
+
+    switch (_currentIndex) {
+      case 1:
+        title = 'Search';
+        subtitle = 'Search functionality available';
+        icon = Icons.search;
+        break;
+      case 2:
+        title = 'Favorites';
+        subtitle = '${_favoriteMovies.length} movies in favorites';
+        icon = Icons.favorite;
+        break;
+      case 3:
+        title = 'Profile';
+        subtitle = 'Profile screen coming soon';
+        icon = Icons.person;
+        break;
+    }
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 64,
+            color: Colors.blue,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: TextStyle(
+              color: theme.textTheme.bodyLarge?.color,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: theme.textTheme.bodyMedium?.color,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _currentIndex = 0;
+              });
+            },
+            child: const Text('Back to Home'),
+          ),
+        ],
+      ),
     );
   }
 

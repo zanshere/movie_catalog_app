@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_catalog_app/services/movie_service.dart';
+import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
 
@@ -11,7 +11,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final MovieService _movieService = MovieService();
   final TextEditingController _searchController = TextEditingController();
   final Set<String> _favoriteMovies = {};
   List<Movie> _searchResults = [];
@@ -33,9 +32,18 @@ class _SearchScreenState extends State<SearchScreen> {
       if (query.isEmpty) {
         _searchResults = [];
       } else {
-        _searchResults = _movieService.searchMovies(query);
+        _searchResults = _searchMovies(query);
       }
     });
+  }
+
+  List<Movie> _searchMovies(String query) {
+    final lowercaseQuery = query.toLowerCase();
+    return dummyMovies.where((movie) {
+      return movie.title.toLowerCase().contains(lowercaseQuery) ||
+             movie.genres.any((genre) => genre.toLowerCase().contains(lowercaseQuery)) ||
+             movie.description.toLowerCase().contains(lowercaseQuery);
+    }).toList();
   }
 
   @override
