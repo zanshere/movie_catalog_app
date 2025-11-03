@@ -31,11 +31,6 @@ class _MovieListScreenState extends State<MovieListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth >= 600;
-    final crossAxisCount = isTablet ? 3 : 2;
-    final childAspectRatio = isTablet ? 0.7 : 0.65;
-
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F1E),
       appBar: AppBar(
@@ -45,6 +40,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
           widget.title,
           style: const TextStyle(
             color: Colors.white,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -53,27 +49,42 @@ class _MovieListScreenState extends State<MovieListScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: childAspectRatio,
-          ),
-          itemCount: widget.movies.length,
-          itemBuilder: (context, index) {
-            final movie = widget.movies[index];
-            return MovieCard(
-              movie: movie,
-              isFavorite: _favoriteMovies.contains(movie.id),
-              onFavoriteToggle: (isFavorite) {
-                _toggleFavorite(movie.id);
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenWidth = constraints.maxWidth;
+          final isTablet = screenWidth >= 600;
+          final isDesktop = screenWidth >= 900;
+          final isLargeDesktop = screenWidth >= 1200;
+          
+          final crossAxisCount = isLargeDesktop ? 5 : 
+                               isDesktop ? 4 : 
+                               isTablet ? 3 : 2;
+          final childAspectRatio = isDesktop ? 0.7 : 0.65;
+          final padding = isDesktop ? 32.0 : 16.0;
+
+          return Padding(
+            padding: EdgeInsets.all(padding),
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: childAspectRatio,
+              ),
+              itemCount: widget.movies.length,
+              itemBuilder: (context, index) {
+                final movie = widget.movies[index];
+                return MovieCard(
+                  movie: movie,
+                  isFavorite: _favoriteMovies.contains(movie.id),
+                  onFavoriteToggle: (isFavorite) {
+                    _toggleFavorite(movie.id);
+                  },
+                );
               },
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
