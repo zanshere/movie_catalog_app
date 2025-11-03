@@ -67,14 +67,14 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).colorScheme.onBackground),
+            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).colorScheme.onSurface),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
           Text(
             'Search',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
           IconButton(
             icon: Icon(
               widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             onPressed: widget.onThemeToggle,
           ),
@@ -98,31 +98,31 @@ class _SearchScreenState extends State<SearchScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          Icon(Icons.search, color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7)),
+          Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: _searchController,
               focusNode: _searchFocusNode,
               onChanged: _performSearch,
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
               decoration: InputDecoration(
                 hintText: 'Search movies...',
-                hintStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)),
+                hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
                 border: InputBorder.none,
               ),
-              cursorColor: Theme.of(context).colorScheme.onBackground,
+              cursorColor: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           if (_query.isNotEmpty)
             GestureDetector(
               onTap: _clearSearch,
-              child: Icon(Icons.clear, color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)),
+              child: Icon(Icons.clear, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
             ),
         ],
       ),
@@ -136,16 +136,16 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search, size: 64, color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3)),
+            Icon(Icons.search, size: 64, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
             const SizedBox(height: 16),
             Text(
               'Find Movies',
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'Search for your favorite movies by title or genre',
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7)),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
               textAlign: TextAlign.center,
             ),
           ],
@@ -161,16 +161,16 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off_rounded, size: 64, color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3)),
+            Icon(Icons.search_off_rounded, size: 64, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3)),
             const SizedBox(height: 16),
             Text(
               'No results found',
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'Try a different keyword.',
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6)),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)),
             ),
           ],
         ),

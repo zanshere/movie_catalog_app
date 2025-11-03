@@ -31,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               'Logout',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -41,14 +41,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         content: Text(
           'Are you sure you want to logout from your account?',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.8),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
             fontSize: 14,
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7))),
+            child: Text('Cancel', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7))),
           ),
           ElevatedButton(
             onPressed: () {
@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -112,13 +112,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'alex.johnson@email.com',
-                  style: TextStyle(color: Colors.white.withOpacity(0.8)),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Row(
@@ -156,15 +156,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onBackground.withOpacity(0.12),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: Colors.blue.shade300),
           ),
           const SizedBox(height: 8),
-          Text(count, style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(count, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), fontSize: 12)),
+          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12)),
         ],
       );
     }
@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -197,13 +197,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }) {
       return ListTile(
         leading: Icon(icon, color: Colors.blue.shade300),
-        title: Text(title, style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
-        subtitle: Text(subtitle, style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), fontSize: 12)),
+        title: Text(title, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        subtitle: Text(subtitle, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12)),
         trailing: onChanged != null
             ? Switch.adaptive(
                 value: value!,
                 onChanged: onChanged,
-                activeColor: Colors.blue,
+                activeTrackColor: Colors.blue,
               )
             : const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white54, size: 16),
       );
@@ -212,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -233,12 +233,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           ListTile(
             leading: Icon(Icons.dark_mode_rounded, color: Colors.blue.shade300),
-            title: Text('Dark Mode', style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
-            subtitle: Text('Use dark theme across the app', style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), fontSize: 12)),
+            title: Text('Dark Mode', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+            subtitle: Text('Use dark theme across the app', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12)),
             trailing: IconButton(
               icon: Icon(
                 widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               onPressed: widget.onThemeToggle,
             ),
@@ -264,9 +264,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       width: double.infinity,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red.withOpacity(0.2),
+          backgroundColor: Colors.red.withValues(alpha: 0.2),
           foregroundColor: Colors.red.shade300,
-          side: BorderSide(color: Colors.red.withOpacity(0.3)),
+          side: BorderSide(color: Colors.red.withValues(alpha: 0.3)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
@@ -292,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onBackground),
+                      icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
                       onPressed: () => Navigator.pop(context),
                     ),
                     const Expanded(
@@ -304,7 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.settings_rounded, color: Theme.of(context).colorScheme.onBackground),
+                      icon: Icon(Icons.settings_rounded, color: Theme.of(context).colorScheme.onSurface),
                       onPressed: () {},
                     ),
                   ],

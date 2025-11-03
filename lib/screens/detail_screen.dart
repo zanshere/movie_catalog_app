@@ -74,19 +74,19 @@ class _DetailScreenState extends State<DetailScreen> {
         title: Text(
           widget.movie.title,
           style: TextStyle(
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.bold
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onBackground),
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
             icon: Icon(
               _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: _isFavorite ? Colors.red : theme.colorScheme.onBackground,
+              color: _isFavorite ? Colors.red : theme.colorScheme.onSurface,
             ),
             onPressed: _toggleFavorite,
           ),
@@ -118,7 +118,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 Text(
                   widget.movie.title,
                   style: TextStyle(
-                    color: theme.colorScheme.onBackground,
+                    color: theme.colorScheme.onSurface,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -129,7 +129,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(width: 4),
                     Text(
                       widget.movie.rating.toStringAsFixed(1),
-                      style: TextStyle(color: theme.colorScheme.onBackground),
+                      style: TextStyle(color: theme.colorScheme.onSurface),
                     ),
                   ],
                 ),
@@ -139,14 +139,14 @@ class _DetailScreenState extends State<DetailScreen> {
             const SizedBox(height: 12),
             Text(
               '${widget.movie.releaseYear}',
-              style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.7)),
+              style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
             ),
 
             const SizedBox(height: 20),
             Text(
               "Overview",
               style: TextStyle(
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -154,14 +154,14 @@ class _DetailScreenState extends State<DetailScreen> {
             const SizedBox(height: 8),
             Text(
               widget.movie.description,
-              style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.7), height: 1.5),
+              style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7), height: 1.5),
             ),
 
             const SizedBox(height: 20),
             Text(
               "Genres",
               style: TextStyle(
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -172,7 +172,7 @@ class _DetailScreenState extends State<DetailScreen> {
               children: widget.movie.genres.map((genre) {
                 return Chip(
                   label: Text(genre),
-                  backgroundColor: Colors.blue.withOpacity(0.2),
+                  backgroundColor: Colors.blue.withValues(alpha: 0.2),
                   labelStyle: const TextStyle(color: Colors.blue),
                 );
               }).toList(),
@@ -182,7 +182,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Text(
               "Cast",
               style: TextStyle(
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -201,13 +201,13 @@ class _DetailScreenState extends State<DetailScreen> {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundColor: theme.colorScheme.onBackground.withOpacity(0.1),
-                          child: Icon(Icons.person, color: theme.colorScheme.onBackground.withOpacity(0.5)),
+                          backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                          child: Icon(Icons.person, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           actor,
-                          style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.7)),
+                          style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                         ),
                       ],
                     ),
@@ -225,10 +225,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     context: context,
                     builder: (context) => AlertDialog(
                       backgroundColor: theme.dialogBackgroundColor,
-                      title: Text('Watch Movie', style: TextStyle(color: theme.colorScheme.onBackground)),
+                      title: Text('Watch Movie', style: TextStyle(color: theme.colorScheme.onSurface)),
                       content: Text(
                         'Enjoy watching "${widget.movie.title}"!',
-                        style: TextStyle(color: theme.colorScheme.onBackground.withOpacity(0.7)),
+                        style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
                       ),
                       actions: [
                         TextButton(
