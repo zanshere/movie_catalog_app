@@ -2,27 +2,28 @@ import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 
 class MovieService {
-  
-  // Get all movies
-  List<Movie> getAllMovies() {
-    return dummyMovies;
+  List<Movie> searchMovies(String query) {
+    if (query.isEmpty) return [];
+    
+    final lowercaseQuery = query.toLowerCase();
+    return dummyMovies.where((movie) {
+      return movie.title.toLowerCase().contains(lowercaseQuery) ||
+             movie.genres.any((genre) => genre.toLowerCase().contains(lowercaseQuery)) ||
+             movie.cast.any((actor) => actor.toLowerCase().contains(lowercaseQuery)) ||
+             movie.description.toLowerCase().contains(lowercaseQuery);
+    }).toList();
   }
 
-  // Get featured movies for carousel
-  List<Movie> getFeaturedMovies() {
-    return dummyMovies.take(3).toList();
+  List<Movie> getMoviesByGenre(String genre) {
+    return dummyMovies.where((movie) => movie.genres.contains(genre)).toList();
   }
 
-  // Get new movies
-  List<Movie> getNewMovies() {
-    return dummyMovies;
-  }
-
-  // Get popular movies (sorted by rating)
   List<Movie> getPopularMovies() {
     return List.from(dummyMovies)..sort((a, b) => b.rating.compareTo(a.rating));
   }
 
+  List<Movie> getNewMovies() {
+    return List.from(dummyMovies)..sort((a, b) => b.releaseYear.compareTo(a.releaseYear));
   // Search movies - ENHANCED!
   List<Movie> searchMovies(String query) {
     return dummyMovies.where((movie) => 

@@ -11,23 +11,32 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget { 
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isDarkMode = true;
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Movie Streaming App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFF0F0F1E),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF0F0F1E),
-          elevation: 0,
-        ),
+      theme: _isDarkMode ? _darkTheme : _lightTheme,
+      home: HomeScreen(
+        isDarkMode: _isDarkMode,
+        onThemeToggle: _toggleTheme,
       ),
-      home: const HomeScreen(),
       routes: {
         '/detail': (context) {
           final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
@@ -52,4 +61,35 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
+  final ThemeData _darkTheme = ThemeData(
+    primarySwatch: Colors.blue,
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: const Color(0xFF0F0F1E),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFF0F0F1E),
+      elevation: 0,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFF1A1A2E),
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+    ),
+  );
+
+  final ThemeData _lightTheme = ThemeData(
+    primarySwatch: Colors.blue,
+    brightness: Brightness.light,
+    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      foregroundColor: Colors.black,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+    ),
+  );
 }

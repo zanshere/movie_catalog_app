@@ -1,6 +1,6 @@
 // search_screen.dart
 import 'package:flutter/material.dart';
-import 'package:movie_catalog_app/services/movie_service.dart';
+import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
 
@@ -19,7 +19,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final MovieService _movieService = MovieService();
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   List<Movie> _searchResults = [];
@@ -58,6 +57,27 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _performSearch(String query) {
     setState(() {
+      _isSearching = query.isNotEmpty;
+      if (query.isEmpty) {
+        _searchResults = [];
+      } else {
+        _searchResults = _searchMovies(query);
+      }
+    });
+  }
+
+  List<Movie> _searchMovies(String query) {
+    final lowercaseQuery = query.toLowerCase();
+    return dummyMovies.where((movie) {
+      return movie.title.toLowerCase().contains(lowercaseQuery) ||
+             movie.genres.any((genre) => genre.toLowerCase().contains(lowercaseQuery)) ||
+             movie.description.toLowerCase().contains(lowercaseQuery);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
       _currentQuery = query;
       _isSearching = query.isNotEmpty || _selectedGenre != 'All';
       _searchResults = _getFilteredMovies();
@@ -504,34 +524,40 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         title: Container(
           height: 40,
           decoration: BoxDecoration(
+            color: theme.brightness == Brightness.dark 
+                ? Colors.white.withOpacity(0.1)
+                : Colors.grey.withOpacity(0.1),
             color: Colors.white.withAlpha(25),
             borderRadius: BorderRadius.circular(20),
           ),
           child: TextField(
             controller: _searchController,
             onChanged: _performSearch,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
+            style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+            decoration: InputDecoration(
               hintText: 'Search movies...',
-              hintStyle: TextStyle(color: Colors.white54),
+              hintStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
               border: InputBorder.none,
-              prefixIcon: Icon(Icons.search, color: Colors.white54),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              prefixIcon: Icon(Icons.search, color: theme.textTheme.bodyMedium?.color),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
             ),
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: theme.appBarTheme.foregroundColor ?? Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      body: _isSearching
+          ? _searchResults.isEmpty
+              ? Center(
       body: LayoutBuilder(
         builder: (context, constraints) {
           final screenWidth = constraints.maxWidth;
@@ -605,28 +631,81 @@ class _SearchScreenState extends State<SearchScreen> {
                       Icon(
                         Icons.search,
                         size: 64,
-                        color: Colors.grey,
+                        color: theme.textTheme.bodyMedium?.color ?? Colors.grey,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         'Search for movies',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: theme.textTheme.bodyLarge?.color,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Type in the search bar to find your favorite movies',
                         style: TextStyle(
-                          color: Colors.white70,
+                          color: theme.textTheme.bodyMedium?.color,
                           fontSize: 14,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: childAspectRatio,
+                    ),
+                    itemCount: _searchResults.length,
+                    itemBuilder: (context, index) {
+                      final movie = _searchResults[index];
+                      return MovieCard(
+                        movie: movie,
+                        isFavorite: _favoriteMovies.contains(movie.id),
+                        onFavoriteToggle: (isFavorite) {
+                          _toggleFavorite(movie.id);
+                        },
+                      );
+                    },
+                  ),
+                )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.search,
+                    size: 64,
+                    color: theme.textTheme.bodyMedium?.color ?? Colors.grey,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Search for movies',
+                    style: TextStyle(
+                      color: theme.textTheme.bodyLarge?.color,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Type in the search bar to find your favorite movies',
+                    style: TextStyle(
+                      color: theme.textTheme.bodyMedium?.color,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
                 );
         },
       ),

@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 import 'package:movie_catalog_app/widgets/movie_card.dart';
+import 'package:movie_catalog_app/screens/search_screen.dart';
+import 'package:movie_catalog_app/screens/favorites_screen.dart';
 import 'package:movie_catalog_app/screens/search_screen.dart'; // ✅ IMPORT BARU
 import 'package:movie_catalog_app/screens/favorites_screen.dart'; // ✅ IMPORT BARU
 import 'package:movie_catalog_app/screens/profile_screen.dart'; // ✅ IMPORT BARU
 import 'package:movie_catalog_app/widgets/movie_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isDarkMode;
+  final VoidCallback onThemeToggle;
+
+  const HomeScreen({
+    super.key,
+    required this.isDarkMode,
+    required this.onThemeToggle,
+  });
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -196,25 +205,77 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Handle navigation for different tabs
+    if (index == 1) {
+      // Search Screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
+    } else if (index == 2) {
+      // Favorites Screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FavoritesScreen(
+            favoriteMovies: _favoriteMovies,
+            onFavoriteToggle: _toggleFavorite,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
           'MovieStream',
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: theme.appBarTheme.foregroundColor ?? Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
         ),
         actions: [
+          // Theme Toggle Button
           IconButton(
+            icon: Icon(
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+              size: 24,
+            ),
+            onPressed: widget.onThemeToggle,
+          ),
+          // Search Button
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+              size: 28,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: _buildBody(theme),
+      bottomNavigationBar: _buildBottomNavigationBar(theme),
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -244,11 +305,13 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody(ThemeData theme) {
+    // If not on home tab, show placeholder
   Widget _buildBody(ThemeData theme, double horizontalPadding) {
     if (_currentIndex != 0) {
-      return _buildPlaceholderScreen();
+      return _buildPlaceholderScreen(theme);
     }
 
+    // Home screen content
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -278,6 +341,7 @@ class HomeScreenState extends State<HomeScreen> {
         Text(
           '🌟 Featured Movies',
           style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.textTheme.bodyLarge?.color ?? Colors.white,
         const Text(
           'Featured Movies',
           style: TextStyle(
@@ -373,6 +437,94 @@ class HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
+                        _buildNetworkImage(
+                          movie.backdropUrl,
+                          height: 200,
+                          width: double.infinity,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.8),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: GestureDetector(
+                            onTap: () {
+                              _toggleFavorite(movie.id);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                _favoriteMovies.contains(movie.id) 
+                                    ? Icons.favorite 
+                                    : Icons.favorite_border,
+                                color: _favoriteMovies.contains(movie.id) 
+                                    ? Colors.red 
+                                    : Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 20,
+                          left: 20,
+                          right: 20,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                movie.title,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    movie.rating.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    '${movie.releaseYear}',
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                         _buildRatingBadge(movie.rating),
                         const SizedBox(width: 12),
                         _buildYearBadge(movie.releaseYear),
@@ -516,6 +668,8 @@ class HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.textTheme.bodyLarge?.color ?? Colors.white,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -525,6 +679,7 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             GestureDetector(
               onTap: () {
+                _showSeeAllDialog(title, movies, theme);
                 _showSeeAllDialog(title, movies);
               },
               child: Container(
@@ -581,6 +736,29 @@ class HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
+  Widget _buildPlaceholderScreen(ThemeData theme) {
+    String title = 'Home';
+    String subtitle = 'Browse featured movies';
+    IconData icon = Icons.home;
+
+    switch (_currentIndex) {
+      case 1:
+        title = 'Search';
+        subtitle = 'Search functionality available';
+        icon = Icons.search;
+        break;
+      case 2:
+        title = 'Favorites';
+        subtitle = '${_favoriteMovies.length} movies in favorites';
+        icon = Icons.favorite;
+        break;
+      case 3:
+        title = 'Profile';
+        subtitle = 'Profile screen coming soon';
+        icon = Icons.person;
+        break;
+    }
 
   void _showSeeAllDialog(String title, List<Movie> movies) {
     showDialog(
@@ -680,24 +858,24 @@ class HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            _getPlaceholderIcon(),
+            icon,
             size: 64,
             color: Colors.blue,
           ),
           const SizedBox(height: 16),
           Text(
-            _getPlaceholderText(),
-            style: const TextStyle(
-              color: Colors.white,
+            title,
+            style: TextStyle(
+              color: theme.textTheme.bodyLarge?.color,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            _getPlaceholderSubtext(),
-            style: const TextStyle(
-              color: Colors.white70,
+            subtitle,
+            style: TextStyle(
+              color: theme.textTheme.bodyMedium?.color,
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
@@ -721,6 +899,90 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showSeeAllDialog(String title, List<Movie> movies, ThemeData theme) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.dialogBackgroundColor ?? const Color(0xFF1A1A2E),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: theme.textTheme.bodyLarge?.color ?? Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 400,
+          child: ListView.builder(
+            itemCount: movies.length,
+            itemBuilder: (context, index) {
+              final movie = movies[index];
+              return ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    movie.posterUrl,
+                    width: 50,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 50,
+                        height: 70,
+                        color: Colors.grey[800],
+                        child: Icon(Icons.movie, color: Colors.white54),
+                      );
+                    },
+                  ),
+                ),
+                title: Text(
+                  movie.title,
+                  style: TextStyle(color: theme.textTheme.bodyLarge?.color ?? Colors.white),
+                ),
+                subtitle: Text(
+                  '⭐ ${movie.rating} • ${movie.releaseYear}',
+                  style: TextStyle(color: theme.textTheme.bodyMedium?.color ?? Colors.white70),
+                ),
+                trailing: IconButton(
+                  icon: Icon(
+                    _favoriteMovies.contains(movie.id)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: _favoriteMovies.contains(movie.id)
+                        ? Colors.red
+                        : theme.textTheme.bodyLarge?.color ?? Colors.white,
+                  ),
+                  onPressed: () {
+                    _toggleFavorite(movie.id);
+                  },
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                    context,
+                    '/detail',
+                    arguments: movie,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Close',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  BottomNavigationBar _buildBottomNavigationBar(ThemeData theme) {
   IconData _getPlaceholderIcon() {
     switch (_currentIndex) {
       case 1: return Icons.search;
@@ -752,8 +1014,10 @@ class HomeScreenState extends State<HomeScreen> {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: _onItemTapped,
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
       type: BottomNavigationBarType.fixed,
+      selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+      unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
       selectedItemColor: Colors.blue,
       unselectedItemColor: Colors.grey,
       selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),

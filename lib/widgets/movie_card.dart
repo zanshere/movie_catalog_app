@@ -96,6 +96,16 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 600;
+    
+    // Responsive dimensions
+    final imageHeight = isTablet ? 280.0 : 220.0;
+    final cardWidth = isTablet ? 200.0 : 160.0;
+    final titleFontSize = isTablet ? 15.0 : 13.0;
+    final genreFontSize = isTablet ? 10.0 : 9.0;
+    final iconSize = isTablet ? 20.0 : 18.0;
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
@@ -262,6 +272,56 @@ class MovieCard extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 8),
+              
+              // ✅ Bagian Title - Dengan constraint yang tepat
+              SizedBox(
+                height: 40,
+                child: Text(
+                  movie.title,
+                  style: TextStyle(
+                    color: theme.textTheme.bodyLarge?.color ?? Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              
+              const SizedBox(height: 4),
+              
+              // ✅ Bagian Genres - Dengan constraint
+              SizedBox(
+                height: 32,
+                child: Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: movie.genres.take(2).map((genre) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        genre.length > 8 
+                            ? '${genre.substring(0, 8)}...'
+                            : genre,
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: genreFontSize,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
             ),
           ),
         );

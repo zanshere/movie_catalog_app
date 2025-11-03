@@ -8,6 +8,7 @@ class Movie {
   final String description;
   final int releaseYear;
   final String duration;
+  final List<String> cast; // Tambahkan ini
 
   const Movie({
     required this.id,
@@ -19,6 +20,7 @@ class Movie {
     required this.description,
     required this.releaseYear,
     required this.duration,
+    required this.cast, // Tambahkan ini
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Movie {
       description: json['description'],
       releaseYear: json['releaseYear'],
       duration: json['duration'],
+      cast: List<String>.from(json['cast']), // Tambahkan ini
     );
   }
 }
