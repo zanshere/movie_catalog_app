@@ -48,53 +48,69 @@ class _MovieCarouselState extends State<MovieCarousel> {
     super.dispose();
   }
 
-  Widget _buildNetworkImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
-    return Image.network(
-      imageUrl,
+  Widget _buildImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
+    if (imageUrl.startsWith('http')) {
+      return Image.network(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            height: height,
+            width: width,
+            color: Colors.grey[800],
+            child: Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+                color: Colors.blue,
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildErrorPlaceholder(height: height, width: width);
+        },
+      );
+    } else {
+      return Image.asset(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildErrorPlaceholder(height: height, width: width);
+        },
+      );
+    }
+  }
+
+  Widget _buildErrorPlaceholder({double? height, double? width}) {
+    return Container(
       height: height,
       width: width,
-      fit: fit ?? BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Container(
-          height: height,
-          width: width,
-          color: Colors.grey[800],
-          child: Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                  : null,
-              color: Colors.blue,
+      color: Colors.grey[800],
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.movie,
+            color: Colors.white54,
+            size: 40,
+          ),
+          SizedBox(height: 8),
+          Text(
+            'No Image',
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 12,
             ),
           ),
-        );
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          height: height,
-          width: width,
-          color: Colors.grey[800],
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.movie,
-                color: Colors.white54,
-                size: 40,
-              ),
-              SizedBox(height: 8),
-              Text(
-                'No Image',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -107,6 +123,12 @@ class _MovieCarouselState extends State<MovieCarousel> {
         
         final carouselHeight = isWide ? 280.0 : 200.0;
         final viewportFraction = isWide ? 0.7 : 0.85;
+
+        // Update page controller dengan viewportFraction yang sesuai
+        if (_pageController.viewportFraction != viewportFraction) {
+          _pageController.dispose();
+          _pageController = PageController(viewportFraction: viewportFraction);
+        }
 
         return Column(
           children: [
@@ -149,8 +171,8 @@ class _MovieCarouselState extends State<MovieCarousel> {
                         borderRadius: BorderRadius.circular(16),
                         child: Stack(
                           children: [
-                            _buildNetworkImage(
-                              movie.backdropUrl,
+                            _buildImage(
+                              movie.backdropUrl.isNotEmpty ? movie.backdropUrl : movie.posterUrl,
                               height: carouselHeight,
                               width: double.infinity,
                             ),

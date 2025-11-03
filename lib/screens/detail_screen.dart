@@ -19,6 +19,61 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
+  Widget _buildImage(String imageUrl, {double? height, double? width, BoxFit? fit}) {
+    if (imageUrl.startsWith('http')) {
+      return Image.network(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            height: height,
+            width: width,
+            color: Colors.grey.withAlpha(25),
+            child: Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _placeholderPoster(height: height, width: width);
+        },
+      );
+    } else {
+      return Image.asset(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _placeholderPoster(height: height, width: width);
+        },
+      );
+    }
+  }
+
+  Widget _placeholderPoster({double? height, double? width}) {
+    return Container(
+      height: height,
+      width: width,
+      color: Colors.grey.withAlpha(51),
+      child: Center(
+        child: Icon(
+          Icons.movie,
+          size: 64,
+          color: Colors.white54,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,34 +166,9 @@ class _DetailScreenState extends State<DetailScreen> {
       aspectRatio: 2 / 3,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          widget.movie.posterUrl,
+        child: _buildImage(
+          widget.movie.posterUrl.isNotEmpty ? widget.movie.posterUrl : widget.movie.backdropUrl,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => _placeholderPoster(),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Container(
-              color: Colors.grey.withAlpha(25),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _placeholderPoster() {
-    return Container(
-      color: Colors.grey.withAlpha(51),
-      child: const Center(
-        child: Icon(
-          Icons.movie,
-          size: 64,
-          color: Colors.white54,
         ),
       ),
     );
