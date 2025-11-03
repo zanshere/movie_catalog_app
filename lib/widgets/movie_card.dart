@@ -26,14 +26,8 @@ class MovieCard extends StatelessWidget {
             height: height,
             width: width,
             color: Colors.grey[800],
-            child: Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                    : null,
-                color: Colors.blue,
-                strokeWidth: 2,
-              ),
+            child: const Center(
+              child: CircularProgressIndicator(color: Colors.blue, strokeWidth: 2),
             ),
           );
         },
@@ -62,93 +56,75 @@ class MovieCard extends StatelessWidget {
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.movie,
-            color: Colors.white54,
-            size: 32,
-          ),
+          Icon(Icons.movie, color: Colors.white54, size: 32),
           SizedBox(height: 4),
-          Text(
-            'No Image',
-            style: TextStyle(
-              color: Colors.white54,
-              fontSize: 10,
-            ),
-          ),
+          Text('No Image', style: TextStyle(color: Colors.white54, fontSize: 10)),
         ],
       ),
     );
   }
 
-  Widget yailah(BuildContext context) {
-    // Temp: Test asset loading
-    Image.asset(
-      'assets/images/1_kakak_7_ponakan.jpeg',
-      height: 100,
-      width: 100,
-      errorBuilder: (context, error, stackTrace) {
-        print('TEST - Asset error: $error');
-        return Text('Failed to load asset');
-      },
-    );
-    return Container();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth >= 600;
-    
-    // Responsive dimensions
-    final imageHeight = isTablet ? 280.0 : 220.0;
-    final cardWidth = isTablet ? 200.0 : 160.0;
-    final titleFontSize = isTablet ? 15.0 : 13.0;
-    final genreFontSize = isTablet ? 10.0 : 9.0;
-    final iconSize = isTablet ? 20.0 : 18.0;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
         final isTablet = screenWidth >= 600;
         final isDesktop = screenWidth >= 900;
         final isLargeDesktop = screenWidth >= 1200;
-        
-        // Responsive dimensions - disesuaikan agar sesuai dengan tinggi 320px
-        final imageHeight = isLargeDesktop ? 220.0 : 
-                           isDesktop ? 210.0 : 
-                           isTablet ? 200.0 : 190.0;
-        final cardWidth = isLargeDesktop ? 220.0 : 
-                         isDesktop ? 200.0 : 
-                         isTablet ? 180.0 : 160.0;
-        final titleFontSize = isLargeDesktop ? 16.0 : 
-                            isDesktop ? 15.0 : 
-                            isTablet ? 14.0 : 13.0;
-        final genreFontSize = isLargeDesktop ? 11.0 : 
-                            isDesktop ? 10.0 : 
-                            isTablet ? 9.0 : 8.0;
-        final iconSize = isLargeDesktop ? 22.0 : 
-                        isDesktop ? 20.0 : 
-                        isTablet ? 18.0 : 16.0;
+
+        final imageHeight = isLargeDesktop
+            ? 220.0
+            : isDesktop
+                ? 210.0
+                : isTablet
+                    ? 200.0
+                    : 190.0;
+        final cardWidth = isLargeDesktop
+            ? 220.0
+            : isDesktop
+                ? 200.0
+                : isTablet
+                    ? 180.0
+                    : 160.0;
+        final titleFontSize = isLargeDesktop
+            ? 16.0
+            : isDesktop
+                ? 15.0
+                : isTablet
+                    ? 14.0
+                    : 13.0;
+        final genreFontSize = isLargeDesktop
+            ? 11.0
+            : isDesktop
+                ? 10.0
+                : isTablet
+                    ? 9.0
+                    : 8.0;
+        final iconSize = isLargeDesktop
+            ? 22.0
+            : isDesktop
+                ? 20.0
+                : isTablet
+                    ? 18.0
+                    : 16.0;
 
         return MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/detail',
-                arguments: movie,
-              );
+              Navigator.pushNamed(context, '/detail', arguments: movie);
             },
             child: Container(
               width: cardWidth,
-              height: 320.0, // Fixed height untuk konsistensi
+              height: 320.0,
               margin: const EdgeInsets.only(right: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Bagian gambar dengan tinggi yang disesuaikan
+                  // 🎬 Poster
                   SizedBox(
                     height: imageHeight,
                     width: cardWidth,
@@ -157,11 +133,14 @@ class MovieCard extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: _buildImage(
-                            movie.posterUrl.isNotEmpty ? movie.posterUrl : movie.backdropUrl,
+                            movie.posterUrl.isNotEmpty
+                                ? movie.posterUrl
+                                : movie.backdropUrl,
                             height: imageHeight,
                             width: cardWidth,
                           ),
                         ),
+                        // ❤️ Favorite icon
                         Positioned(
                           top: 8,
                           right: 8,
@@ -183,14 +162,13 @@ class MovieCard extends StatelessWidget {
                             ),
                           ),
                         ),
+                        // ⭐ Rating badge
                         Positioned(
                           bottom: 8,
                           left: 8,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: Colors.black.withAlpha(178),
                               borderRadius: BorderRadius.circular(4),
@@ -198,11 +176,7 @@ class MovieCard extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 12,
-                                ),
+                                const Icon(Icons.star, color: Colors.amber, size: 12),
                                 const SizedBox(width: 2),
                                 Text(
                                   movie.rating.toStringAsFixed(1),
@@ -220,15 +194,14 @@ class MovieCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  
-                  // Bagian judul dengan constraint yang tepat
+
+                  // 🏷️ Title
                   SizedBox(
                     height: 40,
-                    width: cardWidth,
                     child: Text(
                       movie.title,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: theme.textTheme.bodyLarge?.color ?? Colors.white,
                         fontSize: titleFontSize,
                         fontWeight: FontWeight.bold,
                       ),
@@ -236,13 +209,11 @@ class MovieCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  
                   const SizedBox(height: 4),
-                  
-                  // Bagian genre dengan constraint yang tepat
+
+                  // 🎭 Genres
                   SizedBox(
                     height: 32,
-                    width: cardWidth,
                     child: Wrap(
                       spacing: 4,
                       runSpacing: 4,
@@ -253,11 +224,11 @@ class MovieCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.blue.withAlpha(51),
+                            color: Colors.blue.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            genre.length > 8 
+                            genre.length > 8
                                 ? '${genre.substring(0, 8)}...'
                                 : genre,
                             style: TextStyle(
@@ -272,56 +243,6 @@ class MovieCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              
-              // ✅ Bagian Title - Dengan constraint yang tepat
-              SizedBox(
-                height: 40,
-                child: Text(
-                  movie.title,
-                  style: TextStyle(
-                    color: theme.textTheme.bodyLarge?.color ?? Colors.white,
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              
-              const SizedBox(height: 4),
-              
-              // ✅ Bagian Genres - Dengan constraint
-              SizedBox(
-                height: 32,
-                child: Wrap(
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: movie.genres.take(2).map((genre) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        genre.length > 8 
-                            ? '${genre.substring(0, 8)}...'
-                            : genre,
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: genreFontSize,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
             ),
           ),
         );
