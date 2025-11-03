@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
-import 'package:movie_catalog_app/screens/detail_screen.dart';
+// import 'package:movie_catalog_app/screens/detail_screen.dart';
 import 'package:movie_catalog_app/screens/search_screen.dart';
 import 'package:movie_catalog_app/screens/favorites_screen.dart';
 import 'package:movie_catalog_app/screens/profile_screen.dart';
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   'Discover Movies',
                   style: TextStyle(
-                    color: theme.colorScheme.onBackground,
+                    color: theme.colorScheme.onSurface,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                   icon: Icon(
                     widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                    color: theme.colorScheme.onBackground,
+                    color: theme.colorScheme.onSurface,
                   ),
                   onPressed: widget.onThemeToggle,
                 ),
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const Spacer(),

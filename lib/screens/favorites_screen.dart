@@ -38,13 +38,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.08),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.arrow_back_ios_rounded,
                 size: 18,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -52,7 +52,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           Text(
             'Favorites',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 22,
               fontWeight: FontWeight.w600,
             ),
@@ -62,13 +62,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 '${favoriteMovies.length}',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -78,7 +78,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           IconButton(
             icon: Icon(
               widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             onPressed: widget.onThemeToggle,
           ),
@@ -98,21 +98,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
-                border: Border.all(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1)),
+                border: Border.all(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)),
               ),
               child: Icon(
                 Icons.movie_creation_rounded,
                 size: 48,
-                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
               ),
             ),
             const SizedBox(height: 32),
             Text(
               'No Favorites Yet',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
               ),
@@ -122,7 +122,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             Text(
               'Movies you add to favorites will appear here',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 15,
                 height: 1.5,
               ),
