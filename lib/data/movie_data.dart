@@ -107,6 +107,7 @@ List<Movie> dummyMovies = [
     description: 'Kisah lucu seorang kakak yang harus mengurus 7 ponakannya yang nakal dan penuh kejutan selama liburan sekolah.',
     releaseYear: 2023,
     duration: '1h 45min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '8',
@@ -118,6 +119,7 @@ List<Movie> dummyMovies = [
     description: 'Empat pekerja rumah hantu palsu tak sengaja membangunkan makhluk halus sungguhan yang mengancam nyawa mereka.',
     releaseYear: 2024,
     duration: '1h 54min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '9',
@@ -129,6 +131,7 @@ List<Movie> dummyMovies = [
     description: 'Keluarga Koharun berusaha mempertahankan toko kelontong mereka dari ancaman supermarket modern di seberang jalan.',
     releaseYear: 2016,
     duration: '1h 38min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '10',
@@ -140,6 +143,7 @@ List<Movie> dummyMovies = [
     description: 'Erwin dan Natalie harus mengelola bisnis keluarga sambil menghadapi masalah rumah tangga mereka sendiri.',
     releaseYear: 2022,
     duration: '1h 52min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '11',
@@ -151,6 +155,7 @@ List<Movie> dummyMovies = [
     description: 'Deadpool bergabung dengan Wolverine dalam petualangan multiverse yang penuh aksi, humor, dan kekacauan.',
     releaseYear: 2024,
     duration: '2h 7min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '12',
@@ -162,6 +167,7 @@ List<Movie> dummyMovies = [
     description: 'Kisah cinta segitiga antara tiga remaja yang terjebak dalam hubungan rumit penuh dendam dan penyesalan.',
     releaseYear: 2023,
     duration: '1h 40min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '13',
@@ -173,6 +179,7 @@ List<Movie> dummyMovies = [
     description: 'Tiga guru dengan metode mengajar unik berusaha mengubah sekolah terbelakang menjadi tempat belajar yang menyenangkan.',
     releaseYear: 2020,
     duration: '1h 47min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '14',
@@ -184,6 +191,7 @@ List<Movie> dummyMovies = [
     description: 'Pasangan muda mencoba menyelamatkan hubungan mereka dengan meniru adegan-adegan romantis dari film favorit mereka.',
     releaseYear: 2021,
     duration: '1h 45min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '15',
@@ -195,6 +203,7 @@ List<Movie> dummyMovies = [
     description: 'Petualangan epik di dunia blocky Minecraft dimana seorang pahlawan harus menyelamatkan dunia dari ancaman Ender Dragon.',
     releaseYear: 2025,
     duration: '2h 15min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '16',
@@ -206,6 +215,7 @@ List<Movie> dummyMovies = [
     description: 'Kisah pasangan suami istri dengan karakter berbeda yang harus menghadapi masalah rumah tangga dengan cara-cara unik.',
     releaseYear: 2021,
     duration: '1h 45min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '17',
@@ -217,6 +227,7 @@ List<Movie> dummyMovies = [
     description: 'Seorang pria yang mati rasa secara emosional mencari arti hidup melalui perjalanan spiritual yang penuh misteri.',
     releaseYear: 2023,
     duration: '1h 50min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '18',
@@ -228,6 +239,7 @@ List<Movie> dummyMovies = [
     description: 'Lima sahabat melakukan road trip lucu penuh kejutan untuk menghadiri pernikahan teman mereka.',
     releaseYear: 2024,
     duration: '1h 48min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '19',
@@ -239,6 +251,7 @@ List<Movie> dummyMovies = [
     description: 'Seorang psikolog mulai mengalami kejadian mengerikan setelah menyaksikan pasien bunuh diri dengan senyuman aneh.',
     releaseYear: 2022,
     duration: '1h 55min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '20',
@@ -250,6 +263,7 @@ List<Movie> dummyMovies = [
     description: 'Kisah cinta yang terjalin di suatu sore antara dua orang asing yang bertemu secara tak terduga.',
     releaseYear: 2023,
     duration: '1h 40min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
   Movie(
     id: '21',
@@ -261,5 +275,6 @@ List<Movie> dummyMovies = [
     description: 'Kejadian misterius berulang setiap waktu maghrib di sebuah desa terpencil, mengungkap rahasia kelam masa lalu.',
     releaseYear: 2023,
     duration: '1h 45min',
+    cast: ['Chico kurniawan', 'Donnie Yen', 'Bill Skarsgård'],
   ),
 ];

@@ -42,20 +42,35 @@ class _MyAppState extends State<MyApp> {
           final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
           return DetailScreen(movie: movie);
         },
-        '/search': (context) => const SearchScreen(),
+        '/search': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+          return SearchScreen(
+            favoriteMovies: args?['favoriteMovies'] ?? <String>{},
+            onFavoriteToggle: args?['onFavoriteToggle'] ?? (String id) {},
+            isDarkMode: _isDarkMode,
+            onThemeToggle: _toggleTheme,
+          );
+        },
         '/favorites': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
           return FavoritesScreen(
             favoriteMovies: args?['favoriteMovies'] ?? <String>{},
             onFavoriteToggle: args?['onFavoriteToggle'] ?? (String id) {},
+            isDarkMode: _isDarkMode,
+            onThemeToggle: _toggleTheme,
           );
         },
-        '/profile': (context) => const ProfileScreen(),
+        '/profile': (context) => ProfileScreen(
+          isDarkMode: _isDarkMode,
+          onThemeToggle: _toggleTheme,
+        ),
         '/movie_list': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
           return MovieListScreen(
             title: args['title'],
             movies: args['movies'],
+            isDarkMode: _isDarkMode,
+            onThemeToggle: _toggleTheme,
           );
         },
       },

@@ -5,11 +5,15 @@ import 'package:movie_catalog_app/widgets/movie_card.dart';
 class MovieListScreen extends StatefulWidget {
   final String title;
   final List<Movie> movies;
+  final bool isDarkMode;
+  final VoidCallback onThemeToggle;
 
   const MovieListScreen({
     super.key,
     required this.title,
     required this.movies,
+    required this.isDarkMode,
+    required this.onThemeToggle,
   });
 
   @override
@@ -32,22 +36,31 @@ class _MovieListScreenState extends State<MovieListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           widget.title,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onBackground,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onBackground),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            onPressed: widget.onThemeToggle,
+          ),
+        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {

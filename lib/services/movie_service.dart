@@ -2,43 +2,26 @@ import 'package:movie_catalog_app/data/movie_data.dart';
 import 'package:movie_catalog_app/models/movie.dart';
 
 class MovieService {
+  // Cari film berdasarkan query
   List<Movie> searchMovies(String query) {
     if (query.isEmpty) return [];
-    
+
     final lowercaseQuery = query.toLowerCase();
     return dummyMovies.where((movie) {
       return movie.title.toLowerCase().contains(lowercaseQuery) ||
-             movie.genres.any((genre) => genre.toLowerCase().contains(lowercaseQuery)) ||
-             movie.cast.any((actor) => actor.toLowerCase().contains(lowercaseQuery)) ||
-             movie.description.toLowerCase().contains(lowercaseQuery);
+          movie.genres.any((genre) => genre.toLowerCase().contains(lowercaseQuery)) ||
+          movie.cast.any((actor) => actor.toLowerCase().contains(lowercaseQuery)) ||
+          movie.description.toLowerCase().contains(lowercaseQuery);
     }).toList();
   }
 
-  List<Movie> getMoviesByGenre(String genre) {
-    return dummyMovies.where((movie) => movie.genres.contains(genre)).toList();
-  }
-
-  List<Movie> getPopularMovies() {
-    return List.from(dummyMovies)..sort((a, b) => b.rating.compareTo(a.rating));
-  }
-
-  List<Movie> getNewMovies() {
-    return List.from(dummyMovies)..sort((a, b) => b.releaseYear.compareTo(a.releaseYear));
-  // Search movies - ENHANCED!
-  List<Movie> searchMovies(String query) {
-    return dummyMovies.where((movie) => 
-      movie.title.toLowerCase().contains(query.toLowerCase()) ||
-      movie.genres.any((genre) => genre.toLowerCase().contains(query.toLowerCase()))
-    ).toList();
-  }
-
-  // Get movies by genre
+  // Ambil film berdasarkan genre
   List<Movie> getMoviesByGenre(String genre) {
     if (genre == 'All') return dummyMovies;
     return dummyMovies.where((movie) => movie.genres.contains(genre)).toList();
   }
 
-  // Get all available genres
+  // Ambil semua genre unik
   List<String> getAllGenres() {
     final genreSet = <String>{};
     for (var movie in dummyMovies) {
@@ -47,7 +30,22 @@ class MovieService {
     return genreSet.toList()..sort();
   }
 
-  // Get movie by ID
+  // Ambil film populer (berdasarkan rating)
+  List<Movie> getPopularMovies() {
+    return List.from(dummyMovies)..sort((a, b) => b.rating.compareTo(a.rating));
+  }
+
+  // Ambil film baru (berdasarkan tahun rilis)
+  List<Movie> getNewMovies() {
+    return List.from(dummyMovies)..sort((a, b) => b.releaseYear.compareTo(a.releaseYear));
+  }
+
+  // Ambil film favorit berdasarkan ID
+  List<Movie> getFavoriteMovies(Set<String> favoriteIds) {
+    return dummyMovies.where((movie) => favoriteIds.contains(movie.id)).toList();
+  }
+
+  // Ambil satu film berdasarkan ID
   Movie? getMovieById(String id) {
     try {
       return dummyMovies.firstWhere((movie) => movie.id == id);
@@ -56,24 +54,18 @@ class MovieService {
     }
   }
 
-  // Get favorites
-  List<Movie> getFavoriteMovies(Set<String> favoriteIds) {
-    return dummyMovies.where((movie) => favoriteIds.contains(movie.id)).toList();
-  }
-
-  // Combined search with genre filter
+  // Pencarian dengan filter genre
   List<Movie> searchMoviesWithFilters(String query, String genre) {
     List<Movie> results = dummyMovies;
 
-    // Filter by search query
+    // Filter berdasarkan kata kunci
     if (query.isNotEmpty) {
-      results = results.where((movie) => 
-        movie.title.toLowerCase().contains(query.toLowerCase()) ||
-        movie.genres.any((g) => g.toLowerCase().contains(query.toLowerCase()))
-      ).toList();
+      results = results.where((movie) =>
+          movie.title.toLowerCase().contains(query.toLowerCase()) ||
+          movie.genres.any((g) => g.toLowerCase().contains(query.toLowerCase()))).toList();
     }
 
-    // Filter by genre
+    // Filter berdasarkan genre
     if (genre != 'All') {
       results = results.where((movie) => movie.genres.contains(genre)).toList();
     }
