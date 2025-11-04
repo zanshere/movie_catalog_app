@@ -51,7 +51,7 @@ flutter:
   assets:
     - assets/images/ # menambahkan semua gambar di folder assets/images/
     - assets/images/poster/ # menambahkan semua gambar di folder assets/images/poster/
-    - assets/videos/ # menambahkan semua gambar di folder assets/images/poster/
+    - assets/videos/ # menambahkan semua video di folder assets/videos/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
