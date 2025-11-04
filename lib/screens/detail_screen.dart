@@ -231,7 +231,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.9),
+                          Colors.black.withValues(alpha: 0.9),
                           Colors.transparent,
                         ],
                       ),
@@ -246,7 +246,7 @@ class _DetailScreenState extends State<DetailScreen> {
               icon: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
@@ -258,7 +258,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 icon: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -328,9 +328,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -461,7 +461,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.red.withOpacity(0.3),
+                                      color: Colors.red.withValues(alpha: 0.3),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     ),
@@ -531,7 +531,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.4),
+                                          color: Colors.black.withValues(alpha: 0.4),
                                           blurRadius: 8,
                                           offset: const Offset(0, 4),
                                         ),
@@ -624,13 +624,13 @@ class _DetailScreenState extends State<DetailScreen> {
             border: isPrimary
                 ? null
                 : Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     width: 1.5,
                   ),
             boxShadow: isPrimary
                 ? [
                     BoxShadow(
-                      color: const Color(0xFFE50914).withOpacity(0.4),
+                      color: const Color(0xFFE50914).withValues(alpha: 0.4),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -650,7 +650,7 @@ class _DetailScreenState extends State<DetailScreen> {
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withValues(alpha: 0.9),
             fontSize: 11,
             fontWeight: FontWeight.w500,
           ),
