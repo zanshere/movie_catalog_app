@@ -243,15 +243,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: widget.onThemeToggle,
             ),
           ),
-          tile(
-            icon: Icons.security_rounded,
-            title: 'Privacy & Security',
-            subtitle: 'Manage your privacy settings',
+          // ✅ Privacy popup
+          ListTile(
+            leading: Icon(Icons.security_rounded, color: Colors.blue.shade300),
+            title: Text('Privacy & Security', style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
+            subtitle: Text('Manage your privacy settings', style: TextStyle(color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), fontSize: 12)),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white54, size: 16),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).dialogBackgroundColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  title: const Text('Privacy & Security'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SwitchListTile(
+                        title: const Text('Allow Data Collection'),
+                        subtitle: const Text('Enable anonymous usage statistics'),
+                        value: true,
+                        onChanged: (_) {},
+                      ),
+                      SwitchListTile(
+                        title: const Text('Two-Factor Authentication'),
+                        subtitle: const Text('Add extra security to your account'),
+                        value: false,
+                        onChanged: (_) {},
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-          tile(
-            icon: Icons.help_rounded,
-            title: 'Help & Support',
-            subtitle: 'Get help and contact support',
+          // ✅ Help popup
+          ListTile(
+            leading: Icon(Icons.help_rounded, color: Colors.blue.shade300),
+            title: Text('Help & Support', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+            subtitle: Text('Get help and contact support', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12)),
+            trailing: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white54, size: 16),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).dialogBackgroundColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  title: const Text('Help & Support'),
+                  content: const Text(
+                    'If you have any issues, contact us at:\n\nsupport@movieapp.com\n\nWe’ll respond within 24 hours.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),

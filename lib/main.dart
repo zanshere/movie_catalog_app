@@ -5,6 +5,8 @@ import 'package:movie_catalog_app/screens/movie_list_screen.dart';
 import 'package:movie_catalog_app/screens/video_player_screen.dart';
 import 'package:movie_catalog_app/models/movie.dart'; // Import Movie model
 
+
+
 void main() {
   runApp(const MyApp());
 }
